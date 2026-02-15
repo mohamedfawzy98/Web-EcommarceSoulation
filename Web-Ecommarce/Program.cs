@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Presistence.Data;
+
 namespace Web_Ecommarce
 {
     public class Program
@@ -13,7 +16,10 @@ namespace Web_Ecommarce
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddDbContext<StoreDbContext>(op =>
+            {
+                op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
