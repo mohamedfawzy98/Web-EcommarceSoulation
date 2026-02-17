@@ -15,11 +15,11 @@ namespace Presistence.Data.Configuration
         {
             builder.HasOne(p => p.ProductBrands)
                 .WithMany()
-                .HasForeignKey(p => p.BrandId);
+                .HasForeignKey(p => p.ProductBrandId);
 
             builder.HasOne(p => p.ProductTypes)
                .WithMany()
-               .HasForeignKey(p => p.TypeId);
+               .HasForeignKey(p => p.ProductTypeId);
 
             builder.Property(p => p.Price)
                 .HasColumnType("decimal(10,2)");

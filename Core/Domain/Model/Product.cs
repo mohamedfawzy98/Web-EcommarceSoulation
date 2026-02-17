@@ -14,8 +14,8 @@ namespace Domain.Model
         public decimal Price { get; set; }
 
         public ProductBrands? ProductBrands {  get; set; }
-        public int? BrandId { get; set; }
+        public int? ProductBrandId { get; set; }
         public ProductTypes? ProductTypes { get; set; }
-        public int? TypeId { get; set; }
+        public int? ProductTypeId { get; set; }
     }
 }

@@ -23,12 +23,12 @@ namespace Web_Ecommarce
                 op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             // Apply DataSeeding
-            builder.Services.AddScoped<IDataSeeed , DataSeed>();
+            builder.Services.AddScoped<IDataSeeed, DataSeed>();
             var app = builder.Build();
 
             // Apply Explocit DI for DataSeeding
 
-            var scope = app.Services.CreateScope();
+            using var scope = app.Services.CreateScope();
             var dataSeeed = scope.ServiceProvider.GetRequiredService<IDataSeeed>();
             dataSeeed.SeedingData();
 

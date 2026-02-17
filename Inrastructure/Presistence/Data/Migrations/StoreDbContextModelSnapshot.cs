@@ -30,9 +30,6 @@ namespace Presistence.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BrandId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -46,14 +43,17 @@ namespace Presistence.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int?>("TypeId")
+                    b.Property<int?>("ProductBrandId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
+                    b.HasIndex("ProductBrandId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("Products");
                 });
@@ -96,11 +96,11 @@ namespace Presistence.Data.Migrations
                 {
                     b.HasOne("Domain.Model.ProductBrands", "ProductBrands")
                         .WithMany()
-                        .HasForeignKey("BrandId");
+                        .HasForeignKey("ProductBrandId");
 
                     b.HasOne("Domain.Model.ProductTypes", "ProductTypes")
                         .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("ProductTypeId");
 
                     b.Navigation("ProductBrands");
 
