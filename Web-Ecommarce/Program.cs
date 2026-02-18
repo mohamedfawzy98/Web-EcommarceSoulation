@@ -30,7 +30,7 @@ namespace Web_Ecommarce
 
             using var scope = app.Services.CreateScope();
             var dataSeeed = scope.ServiceProvider.GetRequiredService<IDataSeeed>();
-            dataSeeed.SeedingData();
+            dataSeeed.SeedingDataAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

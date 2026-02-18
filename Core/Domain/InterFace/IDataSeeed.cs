@@ -8,6 +8,6 @@ namespace Domain.InterFace
 {
     public interface IDataSeeed
     {
-        void SeedingData();
+        Task SeedingDataAsync();
     }
 }

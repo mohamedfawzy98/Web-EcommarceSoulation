@@ -13,37 +13,38 @@ namespace Presistence
 {
     public class DataSeed(StoreDbContext dbContext) : IDataSeeed
     {
-        public void SeedingData()
+        public async Task SeedingDataAsync()
         {
             try
             {
-                if (dbContext.Database.GetPendingMigrations().Any())
+                var Mig = await dbContext.Database.GetPendingMigrationsAsync();
+                if (Mig.Any())
                 {
-                    dbContext.Database.Migrate();
+                    await dbContext.Database.MigrateAsync();
                 }
                 if (!dbContext.ProductTypes.Any())
-                {
-                    var ProductTypesData = File.ReadAllText("../Inrastructure/Presistence/DataSeddingFies/types.json");
-                    var ProductTypes = JsonSerializer.Deserialize<List<ProductTypes>>(ProductTypesData);
+                { // Use OpenRead As Retuen FileStream To Avoid File Locking Issues And to Work with Deserialization Async
+                    var ProductTypesData = File.OpenRead("../Inrastructure/Presistence/DataSeddingFies/types.json");
+                    var ProductTypes = await JsonSerializer.DeserializeAsync<List<ProductTypes>>(ProductTypesData);
                     if (ProductTypes != null && ProductTypes.Any())
-                        dbContext.ProductTypes.AddRange(ProductTypes);
+                        await dbContext.ProductTypes.AddRangeAsync(ProductTypes);
                 }
                 if (!dbContext.ProductBrands.Any())
                 {
-                    var ProductBrandsData = File.ReadAllText("../Inrastructure/Presistence/DataSeddingFies/brands.json");
-                    var ProductBrands = JsonSerializer.Deserialize<List<ProductBrands>>(ProductBrandsData);
+                    var ProductBrandsData = File.OpenRead("../Inrastructure/Presistence/DataSeddingFies/brands.json");
+                    var ProductBrands = await JsonSerializer.DeserializeAsync<List<ProductBrands>>(ProductBrandsData);
                     if (ProductBrands != null && ProductBrands.Any())
-                        dbContext.ProductBrands.AddRange(ProductBrands);
+                        await dbContext.ProductBrands.AddRangeAsync(ProductBrands);
                 }
                 if (!dbContext.Products.Any())
                 {
-                    var ProductData = File.ReadAllText("../Inrastructure/Presistence/DataSeddingFies/products.json");
-                    var Products = JsonSerializer.Deserialize<List<Product>>(ProductData);
+                    var ProductData = File.OpenRead("../Inrastructure/Presistence/DataSeddingFies/products.json");
+                    var Products = await JsonSerializer.DeserializeAsync<List<Product>>(ProductData);
                     if (Products != null && Products.Any())
-                        dbContext.Products.AddRange(Products);
+                        await dbContext.Products.AddRangeAsync(Products);
                 }
 
-                dbContext.SaveChanges();
+                await dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
