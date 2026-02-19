@@ -1,8 +1,12 @@
 
 using Domain.InterFace;
+using Domain.InterFace.UintOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Presistence;
 using Presistence.Data;
+using Presistence.UnitsWork;
+using Services;
+using ServicesAbstarction;
 
 namespace Web_Ecommarce
 {
@@ -24,6 +28,8 @@ namespace Web_Ecommarce
             });
             // Apply DataSeeding
             builder.Services.AddScoped<IDataSeeed, DataSeed>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+             builder.Services.AddScoped<IProductService, ProductService>();
             var app = builder.Build();
 
             // Apply Explocit DI for DataSeeding
