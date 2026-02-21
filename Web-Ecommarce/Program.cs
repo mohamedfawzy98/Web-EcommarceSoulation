@@ -2,11 +2,13 @@
 using Domain.InterFace;
 using Domain.InterFace.UintOfWorks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Presistence;
 using Presistence.Data;
 using Presistence.UnitsWork;
 using Services;
 using ServicesAbstarction;
+using System.Reflection.Metadata;
 
 namespace Web_Ecommarce
 {
@@ -29,9 +31,12 @@ namespace Web_Ecommarce
             // Apply DataSeeding
             builder.Services.AddScoped<IDataSeeed, DataSeed>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IServiceManger, ServiceManger>();
+            // must Insatall In Services Layer 
+            // AutoMapper.Extensions.Microsoft.DependencyInjection Pakages
+            builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
             var app = builder.Build();
-
+            
             // Apply Explocit DI for DataSeeding
 
             using var scope = app.Services.CreateScope();
