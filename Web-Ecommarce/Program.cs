@@ -1,4 +1,3 @@
-
 using Domain.InterFace;
 using Domain.InterFace.UintOfWorks;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +6,7 @@ using Presistence;
 using Presistence.Data;
 using Presistence.UnitsWork;
 using Services;
+using Services.ProfileMapping;
 using ServicesAbstarction;
 using System.Reflection.Metadata;
 
@@ -31,12 +31,14 @@ namespace Web_Ecommarce
             // Apply DataSeeding
             builder.Services.AddScoped<IDataSeeed, DataSeed>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IServiceManger, ServiceManger>();
             // must Insatall In Services Layer 
             // AutoMapper.Extensions.Microsoft.DependencyInjection Pakages
-            builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
+            builder.Services.AddAutoMapper(x => x.AddProfile(new ProductProfile()));
+           //builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
+            builder.Services.AddScoped<IServiceManger, ServiceManger>();
+            builder.Services.AddScoped<PictureResolver>();
             var app = builder.Build();
-            
+
             // Apply Explocit DI for DataSeeding
 
             using var scope = app.Services.CreateScope();
@@ -53,7 +55,7 @@ namespace Web_Ecommarce
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseStaticFiles();
 
             app.MapControllers();
 

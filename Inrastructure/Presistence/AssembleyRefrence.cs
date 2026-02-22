@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Presistence
 {
-    internal class AssembleyRefrence
+    public class AssembleyRefrence
     {
+        // to work Fleent Api In OnModelCreating
     }
 }
