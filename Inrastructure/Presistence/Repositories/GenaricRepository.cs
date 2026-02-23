@@ -1,7 +1,9 @@
-﻿using Domain.InterFace.IRepository;
+﻿using Domain.InterFace;
+using Domain.InterFace.IRepository;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
+using Presistence.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +23,15 @@ namespace Presistence.Repositories
 
 
         public void Update(TEntity entity) => _dbContext.Set<TEntity>().Update(entity);
+
+        public async Task<IEnumerable<TEntity?>> GetAllAsyncWithSpec(ISpecification<TEntity, TKey> specification)
+        {
+            return await SpecificationEvalouter.CreateQuery(_dbContext.Set<TEntity>() ,specification).ToListAsync();
+        }
+
+        public async Task<TEntity> GetByIdAsyncWithSpec(ISpecification<TEntity, TKey> specification)
+        {
+            return await SpecificationEvalouter.CreateQuery(_dbContext.Set<TEntity>() , specification).FirstOrDefaultAsync();
+        }
     }
 }

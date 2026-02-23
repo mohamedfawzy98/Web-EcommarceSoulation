@@ -11,6 +11,8 @@ namespace Domain.InterFace.IRepository
     {
         Task<TEntity> GetByIdAsync(TKey id);
         Task<IEnumerable<TEntity?>> GetAllAsync();
+        Task<IEnumerable<TEntity?>> GetAllAsyncWithSpec(ISpecification<TEntity , TKey> specification);
+        Task<TEntity> GetByIdAsyncWithSpec(ISpecification<TEntity, TKey> specification);
         Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);

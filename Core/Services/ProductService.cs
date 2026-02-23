@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.InterFace.UintOfWorks;
 using Domain.Model;
+using Services.Specifications;
 using ServicesAbstarction;
 using Shared.DTOS;
 using System;
@@ -13,16 +14,20 @@ namespace Services
 {
     public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper) : IProductService
     {
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(int? brandId , int? typeId)
         {
             var repo = _unitOfWork.GetRepository<Product, int>();
-            var Product = await repo.GetAllAsync();          
+            //var Product = await repo.GetAllAsync();
+            var spec = new ProductWithTypeAndBrandSpec(brandId , typeId);
+            var Product = await repo.GetAllAsyncWithSpec(spec);          
             var productDtos = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(Product);
             return productDtos;
         }
         public async Task<ProductDto> GetProductByIdAsync(int id)
         {
-            var ProductId = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(id);
+            var spec = new ProductWithTypeAndBrandSpec(id);
+            var ProductId = await _unitOfWork.GetRepository<Product, int>().GetByIdAsyncWithSpec(spec);
+            //var ProductId = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(id);
             var productDto = _mapper.Map<Product, ProductDto>(ProductId);
             return (productDto);
         }
