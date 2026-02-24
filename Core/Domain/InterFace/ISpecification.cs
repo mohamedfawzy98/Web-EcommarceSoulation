@@ -12,5 +12,7 @@ namespace Domain.InterFace
     {
         Expression<Func<TEntity, bool>>? Criteria { get; }  // Take a lambda exp to filter the data Take  entity return bool
         List<Expression<Func<TEntity , object>>> Include { get; } // Take a lambda exp to include the related data Take entity return object
+        Expression<Func<TEntity, object>>? OrderBy { get; } // Take a lambda exp to order the data Take entity return object    
+        Expression<Func<TEntity, object>>? OrderByDescending { get; } // Take a lambda exp to order the data in descending order Take entity return object
     }
 }

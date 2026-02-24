@@ -17,11 +17,22 @@ namespace Services.Specifications
         {
             Criteria = expression;
         }
+        #region Include
         public List<Expression<Func<TEntity, object>>> Include { get; private set; } = []; // Inatialize the Include list to an empty list
 
         public void AddInclude(Expression<Func<TEntity, object>> includeExpression)
         {
             Include.Add(includeExpression);
         }
+        #endregion
+
+        #region Sorting
+        public Expression<Func<TEntity, object>>? OrderBy { get; private set; }
+        protected void AddOrderBy(Expression<Func<TEntity, object>> orderBy) =>  OrderBy = orderBy;
+        public Expression<Func<TEntity, object>>? OrderByDescending { get; private set; }
+        protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDescending) => OrderByDescending = orderByDescending;
+
+        #endregion
+
     }
 }

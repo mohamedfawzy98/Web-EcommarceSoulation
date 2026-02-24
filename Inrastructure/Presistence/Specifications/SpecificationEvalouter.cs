@@ -14,11 +14,24 @@ namespace Presistence.Specifications
         public static IQueryable<TEntity> CreateQuery<TEntity , TKey> (IQueryable<TEntity> InputQuery , ISpecification<TEntity,TKey> specification) where TEntity : BaseEntity<TKey>
         {
             var Query = InputQuery;
-            if(specification.Criteria is not null)
+            // Apply the criteria to the query if it exists
+            if (specification.Criteria is not null)
             {
                 Query = Query.Where(specification.Criteria);
             }
-            if(specification.Include is not null && specification.Include.Count > 0)
+
+            // Apply the Sorting to the query if it exists
+            if(specification.OrderBy is not null)
+            {
+                Query = Query.OrderBy(specification.OrderBy);   
+            }
+            if(specification.OrderByDescending is not null)
+            {
+                Query = Query.OrderByDescending(specification.OrderByDescending);
+            }
+
+            // Apply the include expressions to the query if they exist
+            if (specification.Include is not null && specification.Include.Count > 0)
             {
                 Query = specification.Include.Aggregate(Query , (CurrentQuery , InExp) => CurrentQuery.Include(InExp)); 
             }

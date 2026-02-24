@@ -1,4 +1,5 @@
-﻿using Shared.DTOS;
+﻿using Shared;
+using Shared.DTOS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ServicesAbstarction
     public interface IProductService
     {
         // Get All Products
-        Task<IEnumerable<ProductDto>> GetAllProductsAsync(int? brandId, int? typeId); // Add Filtration
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync(QueryPrames prames); // Add Filtration  // Add Sorting
 
         // Get Product By Id
         Task<ProductDto> GetProductByIdAsync(int id);
