@@ -28,11 +28,29 @@ namespace Services.Specifications
 
         #region Sorting
         public Expression<Func<TEntity, object>>? OrderBy { get; private set; }
-        protected void AddOrderBy(Expression<Func<TEntity, object>> orderBy) =>  OrderBy = orderBy;
+        protected void AddOrderBy(Expression<Func<TEntity, object>> orderBy) => OrderBy = orderBy;
         public Expression<Func<TEntity, object>>? OrderByDescending { get; private set; }
         protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDescending) => OrderByDescending = orderByDescending;
 
         #endregion
 
+        #region Pagination
+
+        public int Take { get; private set; }
+        public int Skip { get; private set; }
+        public bool IsPaginged { get; set; }
+
+        // page size = 10
+        // page index = 2
+        // count 30
+        // 10 10 10
+        protected void ApplyPagination(int PageSize, int PageIndex)
+        {
+            IsPaginged = true;
+            Take = PageSize;
+            Skip = (PageIndex - 1) * PageSize;
+        }
+
+        #endregion
     }
 }
