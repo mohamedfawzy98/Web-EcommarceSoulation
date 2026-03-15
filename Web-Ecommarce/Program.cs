@@ -9,6 +9,7 @@ using Services;
 using Services.ProfileMapping;
 using ServicesAbstarction;
 using System.Reflection.Metadata;
+using Web_Ecommarce.CustomMiddelWare;
 
 namespace Web_Ecommarce
 {
@@ -44,6 +45,12 @@ namespace Web_Ecommarce
             using var scope = app.Services.CreateScope();
             var dataSeeed = scope.ServiceProvider.GetRequiredService<IDataSeeed>();
             dataSeeed.SeedingDataAsync();
+
+
+
+            // Custome Moddleware for Exception Handling
+            app.UseMiddleware<CustomeExeptionHandlerMiddelWare>();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
