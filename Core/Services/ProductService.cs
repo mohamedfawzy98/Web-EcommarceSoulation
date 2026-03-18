@@ -3,6 +3,7 @@ using Domain.InterFace.UintOfWorks;
 using Domain.Model;
 using Services.Specifications;
 using ServicesAbstarction;
+using ServicesAbstarction.ExcaptionErrors;
 using Shared;
 using Shared.DTOS;
 using System;
@@ -31,6 +32,10 @@ namespace Services
         {
             var spec = new ProductWithTypeAndBrandSpec(id);
             var ProductId = await _unitOfWork.GetRepository<Product, int>().GetByIdAsyncWithSpec(spec);
+            if (ProductId == null)
+            {
+                throw new NotFoundProduct(id);
+            }
             //var ProductId = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(id);
             var productDto = _mapper.Map<Product, ProductDto>(ProductId);
             return (productDto);
