@@ -1,5 +1,6 @@
 using Domain.InterFace;
 using Domain.InterFace.UintOfWorks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Presistence;
@@ -8,6 +9,7 @@ using Presistence.UnitsWork;
 using Services;
 using Services.ProfileMapping;
 using ServicesAbstarction;
+using ServicesAbstarction.ExcaptionErrors;
 using System.Reflection.Metadata;
 using Web_Ecommarce.CustomMiddelWare;
 
@@ -38,6 +40,27 @@ namespace Web_Ecommarce
            //builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
             builder.Services.AddScoped<IServiceManger, ServiceManger>();
             builder.Services.AddScoped<PictureResolver>();
+
+            // Handle Valdation Error
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (actionContext) =>
+                {
+                    var Errors = actionContext.ModelState
+                        .Where(e => e.Value.Errors.Any())
+                        .Select(M => new ValdationError()
+                        {
+                            Filed = M.Key,
+                            Errors = M.Value.Errors.Select(e => e.ErrorMessage)
+                        });
+                    var responseObj = new ValdationErrorToReturn()
+                    {
+                        ValdationErrors = Errors
+                    };
+                    return new BadRequestObjectResult(responseObj);
+                };
+            });
+
             var app = builder.Build();
 
             // Apply Explocit DI for DataSeeding
