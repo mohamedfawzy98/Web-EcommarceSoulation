@@ -21,65 +21,34 @@ namespace Web_Ecommarce
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            #region Service Regestraion
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<StoreDbContext>(op =>
-            {
-                op.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            // Apply DataSeeding
-            builder.Services.AddScoped<IDataSeeed, DataSeed>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            // must Insatall In Services Layer 
-            // AutoMapper.Extensions.Microsoft.DependencyInjection Pakages
-            builder.Services.AddAutoMapper(x => x.AddProfile(new ProductProfile()));
-           //builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
-            builder.Services.AddScoped<IServiceManger, ServiceManger>();
-            builder.Services.AddScoped<PictureResolver>();
-
-            // Handle Valdation Error
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-                    var Errors = actionContext.ModelState
-                        .Where(e => e.Value.Errors.Any())
-                        .Select(M => new ValdationError()
-                        {
-                            Filed = M.Key,
-                            Errors = M.Value.Errors.Select(e => e.ErrorMessage)
-                        });
-                    var responseObj = new ValdationErrorToReturn()
-                    {
-                        ValdationErrors = Errors
-                    };
-                    return new BadRequestObjectResult(responseObj);
-                };
-            });
+            // Add Swagger (Web Layer)
+            builder.Services.AddSwaggerervices();
+            // Apply DbContext (Layer Infrasturcture)
+            builder.Services.AddInfrastructureService(builder.Configuration);
+            // Apply AutoMapperl (Layer Service)
+            builder.Services.AddApplicationServices();
+            // Handle Valdation Error (Web Layer)
+            builder.Services.AddWebApplcationServices();
+            #endregion
 
             var app = builder.Build();
 
-            // Apply Explocit DI for DataSeeding
+            // Apply Explocit DI for DataSeeding (web Layer)
+            app.AddSeedingDataAsync();
 
-            using var scope = app.Services.CreateScope();
-            var dataSeeed = scope.ServiceProvider.GetRequiredService<IDataSeeed>();
-            dataSeeed.SeedingDataAsync();
-
-
+            #region MiddelWare
 
             // Custome Moddleware for Exception Handling
-            app.UseMiddleware<CustomeExeptionHandlerMiddelWare>();
+            app.UseCustomeExeptionHandlerMiddelWare();
 
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerMiddelWare();
             }
 
             app.UseHttpsRedirection();
@@ -91,5 +60,6 @@ namespace Web_Ecommarce
 
             app.Run();
         }
-    }
+    } 
+    #endregion
 }
