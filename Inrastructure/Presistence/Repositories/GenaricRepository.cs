@@ -38,3 +38,4 @@ namespace Presistence.Repositories
         => await SpecificationEvalouter.CreateQuery(_dbContext.Set<TEntity>(), specification).CountAsync();
     }
 }
+ 

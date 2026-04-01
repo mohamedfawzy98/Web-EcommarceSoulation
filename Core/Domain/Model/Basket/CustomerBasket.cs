@@ -8,7 +8,7 @@ namespace Domain.Model.Basket
 {
     public class CustomerBasket
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = default!;
         public ICollection<BasketItem> Items { get; set; } = [];
     }
 }
