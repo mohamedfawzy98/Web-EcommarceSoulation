@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presistence.Data;
+using Presistence.Repositories;
 using Presistence.UnitsWork;
 using StackExchange.Redis;
 using System;
@@ -29,10 +30,10 @@ namespace Presistence
             // Apply DataSeeding
             Services.AddScoped<IDataSeeed, DataSeed>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            Services.AddScoped<IBasketRepository, IBasketRepository>();
+            Services.AddScoped<IBasketRepository, BasketRepository>();
             Services.AddSingleton<IConnectionMultiplexer>( (_) =>
             {
-              return  ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnection")!);
+              return  ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnection"));
             });
             return Services;
         }
