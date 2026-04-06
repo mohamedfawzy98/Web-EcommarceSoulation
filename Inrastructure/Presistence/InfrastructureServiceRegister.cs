@@ -31,6 +31,7 @@ namespace Presistence
             Services.AddScoped<IDataSeeed, DataSeed>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
             Services.AddScoped<IBasketRepository, BasketRepository>();
+            Services.AddScoped<ICashRepository, CashRepository>();
             Services.AddSingleton<IConnectionMultiplexer>( (_) =>
             {
               return  ConnectionMultiplexer.Connect(Configuration.GetConnectionString("RedisConnection"));

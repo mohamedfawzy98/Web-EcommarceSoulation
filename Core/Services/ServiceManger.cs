@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class ServiceManger(IUnitOfWork unitOfWork , IMapper mapper , IBasketRepository basketRepository) : IServiceManger
+    public class ServiceManger(IUnitOfWork unitOfWork , IMapper mapper , IBasketRepository basketRepository , ICashRepository cashRepository) : IServiceManger
     {
         // Not Create Object Only When Need It.
         private Lazy<IProductService> _lazyProductServcies = new Lazy<IProductService>(() => new ProductService(unitOfWork , mapper));
@@ -18,5 +18,7 @@ namespace Services
 
         private Lazy<IBasketServices> _basketServices = new Lazy<IBasketServices>(() => new BasketServices(basketRepository,mapper));
         public IBasketServices BasketServices => _basketServices.Value;
+        private Lazy<ICashServices> _cashServices = new Lazy<ICashServices>(() => new CashServices(cashRepository));
+        public ICashServices CashServices => _cashServices.Value;
     }
 }
