@@ -16,6 +16,7 @@ namespace Services
             // must Insatall In Services Layer 
             // AutoMapper.Extensions.Microsoft.DependencyInjection Pakages
             services.AddAutoMapper(x => x.AddProfile(new ProductProfile()));
+            services.AddAutoMapper(x => x.AddProfile(new BasketProfile()));
             //builder.Services.AddAutoMapper(typeof(Services.AssemblyReference).Assembly);
             services.AddScoped<IServiceManger, ServiceManger>();
             services.AddScoped<PictureResolver>();

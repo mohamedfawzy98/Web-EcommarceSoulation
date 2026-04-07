@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Persentation.Attributes;
 using ServicesAbstarction;
 using Shared;
 using Shared.DTOS;
@@ -16,6 +17,7 @@ namespace Persentation.Controllers
     {
         // Get All Product
         [HttpGet]
+        [Cashed(30)]
         public async Task<ActionResult<PaginationResult<ProductDto>>> GetAllProducts([FromQuery]QueryPrames prames)
         {
             var Product = await _serviceManger.ProductService.GetAllProductsAsync(prames);
