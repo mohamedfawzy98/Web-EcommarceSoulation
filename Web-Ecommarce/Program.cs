@@ -11,13 +11,14 @@ using Services.ProfileMapping;
 using ServicesAbstarction;
 using ServicesAbstarction.ExcaptionErrors;
 using System.Reflection.Metadata;
+using System.Threading.Tasks;
 using Web_Ecommarce.CustomMiddelWare;
 
 namespace Web_Ecommarce
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,8 @@ namespace Web_Ecommarce
             var app = builder.Build();
 
             // Apply Explocit DI for DataSeeding (web Layer)
-            app.AddSeedingDataAsync();
+            await app.AddSeedingDataAsync();
+            await app.AddSeedingDataIdentityAsync();
 
             #region MiddelWare
 
@@ -60,6 +62,6 @@ namespace Web_Ecommarce
 
             app.Run();
         }
-    } 
+    }
     #endregion
 }
