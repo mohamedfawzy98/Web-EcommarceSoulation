@@ -38,7 +38,7 @@ namespace Presistence.Repositories
                 
             }
 
-            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("JWT:Key"));
+            var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
             var token = new JwtSecurityToken(  // first three Header (Alg , Type)
                 issuer: _configuration["JWT:issuer"],
                 audience: _configuration["JWT:audience"],

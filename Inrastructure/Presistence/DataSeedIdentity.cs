@@ -20,6 +20,9 @@ namespace Presistence
             {
                 await _identityDbContext.Database.MigrateAsync();
             }
+          
+
+            await _identityDbContext.Database.MigrateAsync();
             if (!_userManager.Users.Any())
             {
                 var user = new ApplicationUser

@@ -13,7 +13,7 @@ namespace Presistence.Repositories
 {
     public class UserRepository(UserManager<ApplicationUser> _userManager
         , SignInManager<ApplicationUser> _signInManager
-        , ITokenServices _tokenServices) : IUserRepository
+        ) : IUserRepository
     {
         public async Task<ApplicationUser> LoginAsync(ApplicationUser user)
         {
