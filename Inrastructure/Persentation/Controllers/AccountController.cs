@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Model.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using ServicesAbstarction;
 using Shared.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +15,7 @@ namespace Persentation.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class AccountController(IServiceManger _serviceManger) : ControllerBase
+    public class AccountController(IServiceManger _serviceManger, UserManager<ApplicationUser> _userManager) : ControllerBase
     {
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto logindto)
@@ -33,5 +37,22 @@ namespace Persentation.Controllers
             return Ok(user);
 
         }
+
+        [Authorize]
+        [HttpGet("GeCurrentUser")]
+        public async Task<ActionResult<UserDto>> GeCurrentUser()
+        {
+            var Email = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(Email);
+            var Result = new UserDto()
+            {
+                DisplayName = user?.DispalyName ?? "",
+                Email = user?.Email ?? "",
+                Token = await _serviceManger.TokenServices.CreateTokenServices(user, _userManager)
+
+            };
+
+            return Ok(Result);
+                }
     }
 }

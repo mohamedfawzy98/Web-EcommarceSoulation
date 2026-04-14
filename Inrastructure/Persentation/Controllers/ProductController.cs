@@ -43,6 +43,7 @@ namespace Persentation.Controllers
         }
         // Get All Brands
         [HttpGet("Brands")]
+        [Authorize]
         public async Task<ActionResult<BrandDto>> GetAllBrands()
         {
             var Brands = await _serviceManger.ProductService.GetAllBrandsAsync();
