@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using ServicesAbstarction.ExcaptionErrors;
 using System.Diagnostics.Contracts;
+using System.Text;
 
 namespace Web_Ecommarce
 {
@@ -38,5 +41,32 @@ namespace Web_Ecommarce
             });
             return Services;
         }
+
+        public static IServiceCollection AddAuthenticationServices(
+       this IServiceCollection services,
+       IConfiguration _configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration["JWT:Issuer"],
+                    ValidateAudience = false,
+                    ValidAudience = _configuration["JWT:audience"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]))
+                };
+            });
+
+            return services;
+        }
     }
 }
+

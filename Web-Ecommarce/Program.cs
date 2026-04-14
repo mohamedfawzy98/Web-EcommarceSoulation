@@ -33,6 +33,8 @@ namespace Web_Ecommarce
             builder.Services.AddApplicationServices();
             // Handle Valdation Error (Web Layer)
             builder.Services.AddWebApplcationServices();
+            // Handle Authentcation By Token
+            builder.Services.AddAuthenticationServices(builder.Configuration);
             #endregion
 
             var app = builder.Build();

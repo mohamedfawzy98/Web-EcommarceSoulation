@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Persentation.Attributes;
 using ServicesAbstarction;
 using Shared;
@@ -25,6 +26,7 @@ namespace Persentation.Controllers
         }
 
         // Get Product By Id
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
