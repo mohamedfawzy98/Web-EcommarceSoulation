@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Persentation.Excetnation;
 using ServicesAbstarction;
+using Shared.DTOS;
 using Shared.Users;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace Persentation.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto logindto)
         {
+            
             var user = await _serviceManger.UserServices.LoginAsync(logindto);
             if (user is null)
                 throw new Exception("UnAuth 401");
@@ -54,5 +57,23 @@ namespace Persentation.Controllers
 
             return Ok(Result);
                 }
+
+        [Authorize]
+        [HttpGet("Address")]
+        public async Task<ActionResult<AddressDto>> GetAddress()
+        {
+            var GetAddress = await _userManager.FindUserByAddressAsync(User);
+
+            var MappedAdderss = new AddressDto()
+            {
+                City = GetAddress.Addrees.City,
+                Country = GetAddress.Addrees.Country,
+                FName = GetAddress.Addrees.FName,
+                LName = GetAddress.Addrees.LName,
+                street = GetAddress.Addrees.street
+            };
+
+            return MappedAdderss;
+        }
     }
 }
