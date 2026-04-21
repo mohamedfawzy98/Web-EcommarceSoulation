@@ -22,7 +22,7 @@ namespace Persentation.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto logindto)
         {
-            
+
             var user = await _serviceManger.UserServices.LoginAsync(logindto);
             if (user is null)
                 throw new Exception("UnAuth 401");
@@ -32,7 +32,10 @@ namespace Persentation.Controllers
         }
         [HttpPost("Registr")]
         public async Task<ActionResult<UserDto>> Registr(RegistrDto registrdto)
-        {
+        { // use Resault.value to get the value of the result and check if it is true or false
+            // And Result To Stop Execute any function befor check the email if it is exist or not
+            if (CheckEmail(registrdto.Email).Result.Value)
+                throw new Exception("This Email Is Already Exist");
             var user = await _serviceManger.UserServices.RgisterAsync(registrdto);
             if (user is null)
                 throw new Exception("Please Enter Correct Data To Registr");
@@ -56,7 +59,7 @@ namespace Persentation.Controllers
             };
 
             return Ok(Result);
-                }
+        }
 
         [Authorize]
         [HttpGet("Address")]
@@ -74,6 +77,29 @@ namespace Persentation.Controllers
             };
 
             return MappedAdderss;
+        }
+        [Authorize]
+        [HttpPut("Address")]
+        public async Task<ActionResult<AddressDto>> UpdateAddress(AddressDto address)
+        {
+            var user = await _userManager.FindUserByAddressAsync(User);
+            user.Addrees.City = address.City;   
+            user.Addrees.Country = address.Country;
+            user.Addrees.FName = address.FName;
+            user.Addrees.LName = address.LName;
+            user.Addrees.street = address.street;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return Ok(address);
+
+            return BadRequest("Problem Updating The User");
+        }
+
+        [HttpGet("CheckEmail")]
+        public async Task<ActionResult<bool>> CheckEmail(string Email)
+        {
+           return await _userManager.FindByEmailAsync(Email) is not null;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Shared.DTOS
 {
     public class AddressDto
     {
+        //public int Id { get; set; }
         public string FName { get; set; } = default!;
         public string LName { get; set; } = default!;
         public string City { get; set; } = default!;
