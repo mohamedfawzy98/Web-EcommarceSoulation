@@ -25,6 +25,10 @@ namespace Presistence.Data.Configuration
 
             builder.OwnsOne(o => o.ShippingAddress, sp => sp.WithOwner());
 
+            builder.HasOne(o => o.deliveryMethod)
+                   .WithMany()
+                   .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

@@ -8,10 +8,22 @@ namespace Domain.Model.Orders
 {
     public class Order : BaseEntity<int>
     {
+        public Order(string buyerEmail, Address shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subTotal)
+        {
+            BuyerEmail = buyerEmail;
+            ShippingAddress = shippingAddress;
+            this.deliveryMethod = deliveryMethod;
+            Items = items;
+            SubTotal = subTotal;
+        }
+        public Order()
+        {
+            
+        }
         public string BuyerEmail { get; set; } = default!;
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
         // Status From Enum
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
         // Object From Address
         public Address ShippingAddress { get; set; }
         // Relation Here One With DliveryMethod

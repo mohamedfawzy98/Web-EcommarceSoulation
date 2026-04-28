@@ -1,5 +1,6 @@
 ﻿using Domain.InterFace;
 using Domain.Model;
+using Domain.Model.Orders;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
 using System;
@@ -43,7 +44,13 @@ namespace Presistence
                     if (Products != null && Products.Any())
                         await dbContext.Products.AddRangeAsync(Products);
                 }
-
+                if (!dbContext.DeliveryMethods.Any())
+                {
+                    var DeliveryData = File.OpenRead("../Inrastructure/Presistence/DataSeddingFies/delivery.json");
+                    var DeliveryMethod = await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(DeliveryData);
+                    if (DeliveryMethod != null && DeliveryMethod.Any())
+                        await dbContext.DeliveryMethods.AddRangeAsync(DeliveryMethod);
+                }
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
