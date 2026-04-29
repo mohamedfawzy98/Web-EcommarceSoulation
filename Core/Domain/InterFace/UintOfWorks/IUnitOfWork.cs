@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.InterFace.UintOfWorks
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IAsyncDisposable
     {
         // Use this method to get the repository for a specific entity type and key type.
         // And Not Use aprpert each repo As Not Work Each Repo Create Obect

@@ -13,13 +13,10 @@ namespace Services
 {
     public class OrderServices
         (IBasketRepository _basketRepository,
-        IGenaricRepository<Product, int> _productRepo,
-        IGenaricRepository<DeliveryMethod, int> _deliveryRepo,
-        IGenaricRepository<Order,int> _orderRepo,
         IUnitOfWork _unitOfWork)
         : IOrderServices
     {
-        public async Task<Order> CreateOrderAsync(string BuyerEmail, string BasketId, int DeliveyMethodId, Address ShippingAddress)
+        public async Task<Order?> CreateOrderAsync(string BuyerEmail, string BasketId, int DeliveyMethodId, Address ShippingAddress)
         {
             // GetBasket FromBasketRepo
             var Basket = await _basketRepository.GetCustomerBasketAsync(BasketId);
@@ -30,7 +27,7 @@ namespace Services
             {
                 foreach (var item in Basket.Items)
                 {
-                    var ProductItem = await _productRepo.GetByIdAsync(item.Id); // GetProduct
+                    var ProductItem = await _unitOfWork.GetRepository<Product, int>().GetByIdAsync(item.Id); // GetProduct
                     ProductItemOrder ProductItemOrder = new ProductItemOrder(ProductItem.Id, ProductItem.Name, ProductItem.PictureUrl);
                     var Items = new OrderItem(item.Quantity, ProductItem.Price, ProductItemOrder);
                     OrderItems.Add(Items);
@@ -41,16 +38,17 @@ namespace Services
             var SubTotal = OrderItems.Sum(item => item.Price * item.Quantity);
 
             // Get DeliveryMethod From Repo
-            var DeliveryMethod = await _deliveryRepo.GetByIdAsync(DeliveyMethodId);
+            var DeliveryMethod = await _unitOfWork.GetRepository<DeliveryMethod, int>().GetByIdAsync(DeliveyMethodId);
 
             // Create Order
             var Order = new Order(BuyerEmail, ShippingAddress, DeliveryMethod, OrderItems, SubTotal);
 
             // Creete Order Locally
-            await _orderRepo.AddAsync(Order);
+            await _unitOfWork.GetRepository<Order, int>().AddAsync(Order);
 
             // Save Order In DB
-           await _unitOfWork.Complete();
+            var Result = await _unitOfWork.Complete();
+            if (Result <= 0) return null;
 
             return Order;
         }

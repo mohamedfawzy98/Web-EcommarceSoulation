@@ -32,5 +32,7 @@ namespace Presistence.UnitsWork
             }
         }
         public async Task<int> Complete() => await _dbContext.SaveChangesAsync();
+
+        public ValueTask DisposeAsync() => _dbContext.DisposeAsync();
     }
 }
