@@ -71,8 +71,8 @@ namespace Persentation.Controllers
             {
                 City = GetAddress.Addrees.City,
                 Country = GetAddress.Addrees.Country,
-                FName = GetAddress.Addrees.FName,
-                LName = GetAddress.Addrees.LName,
+                FirstName = GetAddress.Addrees.FName,
+                LastName = GetAddress.Addrees.LName,
                 street = GetAddress.Addrees.street
             };
 
@@ -85,8 +85,8 @@ namespace Persentation.Controllers
             var user = await _userManager.FindUserByAddressAsync(User);
             user.Addrees.City = address.City;   
             user.Addrees.Country = address.Country;
-            user.Addrees.FName = address.FName;
-            user.Addrees.LName = address.LName;
+            user.Addrees.FName = address.FirstName;
+            user.Addrees.LName = address.LastName;
             user.Addrees.street = address.street;
 
             var result = await _userManager.UpdateAsync(user);

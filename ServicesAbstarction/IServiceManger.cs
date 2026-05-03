@@ -11,8 +11,9 @@ namespace ServicesAbstarction
         public IProductService ProductService { get; }
         public IBasketServices BasketServices { get; }
         public ICashServices CashServices { get; }
-       public ITokenServices TokenServices { get; }
+        public ITokenServices TokenServices { get; }
         public IUserServices UserServices { get; }
+        public IOrderServices OrderServices { get; }
 
     }
 }

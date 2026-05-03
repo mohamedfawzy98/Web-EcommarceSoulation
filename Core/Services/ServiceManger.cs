@@ -31,5 +31,9 @@ namespace Services
         private Lazy<IUserServices> _userServices = new Lazy<IUserServices>(() => new UserServices(userManager, _tokenRepository, _userRepository));
 
         public IUserServices UserServices => _userServices.Value;
+
+        public IOrderServices OrderServices => _orderServices.Value;
+        private Lazy<IOrderServices> _orderServices = new Lazy<IOrderServices>(() => new OrderServices(basketRepository,unitOfWork));
+
     }
 }

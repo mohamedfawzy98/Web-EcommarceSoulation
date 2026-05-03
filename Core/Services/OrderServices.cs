@@ -2,6 +2,7 @@
 using Domain.InterFace.UintOfWorks;
 using Domain.Model;
 using Domain.Model.Orders;
+using Services.Specifications.OrderS;
 using ServicesAbstarction;
 using System;
 using System.Collections.Generic;
@@ -53,14 +54,20 @@ namespace Services
             return Order;
         }
 
-        public Task<Order> GetByOdOrderBySpecificUser(string BuyerEmail, int OrderId)
+        public async Task<Order?> GetByOdOrderBySpecificUser(string BuyerEmail, int OrderId)
         {
-            throw new NotImplementedException();
+            var spec = new OrderSpecification(BuyerEmail, OrderId);
+            var order = await _unitOfWork.GetRepository<Order, int>().GetByIdAsyncWithSpec(spec);
+            return order;
         }
 
-        public Task<Order> GetOrderBySpecificUser(string BuyerEmail)
+        public async Task<IEnumerable<Order?>> GetOrderBySpecificUser(string BuyerEmail)
         {
-            throw new NotImplementedException();
+            var orderSpc = new OrderSpecification(BuyerEmail);
+
+            var order = await _unitOfWork.GetRepository<Order, int>().GetAllAsyncWithSpec(orderSpc);
+
+            return order;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Model;
 using Domain.Model.Identity;
+using Domain.Model.Orders;
 using Shared.DTOS;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,9 @@ namespace Services.ProfileMapping
 
             CreateMap<ProductBrands, BrandDto>();
             CreateMap<ProductTypes, TypeDto>();
-            CreateMap<Address , AddressDto>().ReverseMap();
+            CreateMap<Domain.Model.Identity.Address, AddressDto>().ReverseMap();
+
+            CreateMap<AddressDto, Domain.Model.Orders.Address>();
         }
     }
 }
